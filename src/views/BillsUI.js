@@ -23,6 +23,13 @@ const rows = (data) => {
   return (data && data.length) ? data.map(bill => row(bill)).join("") : ""
 }
 
+const compareBillsAntiChrono = (bill1, bill2) => ((bill1.date < bill2.date) ? 1 : -1);
+const sortBills = (bills) => {
+  // console.log("sortBills : ", bills)
+  return (bills && bills.length) ? bills.sort(compareBillsAntiChrono) : bills
+}
+  
+
 export default ({ data: bills, loading, error }) => {
   
   const modal = () => (`
@@ -69,7 +76,7 @@ export default ({ data: bills, loading, error }) => {
               </tr>
           </thead>
           <tbody data-testid="tbody">
-            ${rows(bills)}
+            ${rows(sortBills(bills))}
           </tbody>
           </table>
         </div>
@@ -78,3 +85,5 @@ export default ({ data: bills, loading, error }) => {
     </div>`
   )
 }
+
+// ${rows(sortBills(bills))}
