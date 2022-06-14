@@ -210,14 +210,16 @@ describe("Given I am a user connected as Employee", () => {
       screen.getByTestId("pct").value = "30"
       screen.getByTestId("commentary").value = "Test integration POST"
 
-      // Simulate the upload of the file
+      // Upload a  file
       const input = screen.getByTestId('file')
-      const fakeFile = new File(["(⌐□_□)"], 'test.jpg', { type: "image/png" });
+      const fakeFile = new File(["(⌐□_□)"], 'test.png', { type: "image/png" });
       await waitFor(() => {
             userEvent.upload(input, fakeFile);
       });
 
-      // Simulate the submit of the form
+      const spyStore = jest.spyOn(mockStore, "bills")
+
+      // Submit the form
       await waitFor(() => {
             userEvent.click(screen.getByText('Envoyer'))
       });
@@ -226,7 +228,7 @@ describe("Given I am a user connected as Employee", () => {
 
       const billTest1  = screen.getByText("test1")
       expect(billTest1).toBeTruthy()
-
+      expect(spyStore).toHaveBeenCalled()
     })
   })
 })
