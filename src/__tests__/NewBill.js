@@ -192,6 +192,7 @@ describe("Given I am connected as an employee", () => {
 describe("Given I am a user connected as Employee", () => {
   describe("When I navigate to Bills page", () => {
     test("post a new bill with mock API POST", async () => {
+      localStorage.clear()
       localStorage.setItem("user", JSON.stringify({ type: "Employee", email: "e@e" }));
       const root = document.createElement("div")
       root.setAttribute("id", "root")
@@ -217,7 +218,10 @@ describe("Given I am a user connected as Employee", () => {
             userEvent.upload(input, fakeFile);
       });
 
-      const spyStore = jest.spyOn(mockStore, "bills")
+      jest.spyOn(mockStore, "bills")    
+      jest.spyOn(console, 'error').mockImplementation(() => { });
+      console.error.mockClear();
+      
 
       // Submit the form
       await waitFor(() => {
@@ -226,9 +230,124 @@ describe("Given I am a user connected as Employee", () => {
 
       await waitFor(() => screen.getByText("Mes notes de frais"))
 
+      expect(screen.getByText("Mes notes de frais")).toBeTruthy();
       const billTest1  = screen.getByText("test1")
       expect(billTest1).toBeTruthy()
-      expect(spyStore).toHaveBeenCalled()
+      expect(mockStore.bills).toHaveBeenCalled()
+      expect(console.error).not.toHaveBeenCalled();
+    })
+
+    describe("When an error occurs on API", () => {
+
+      beforeEach(() => {
+        Object.defineProperty(
+            window,
+            'localStorage',
+            { value: localStorageMock }
+        )
+        window.localStorage.clear()
+        window.localStorage.setItem('user', JSON.stringify({
+          type: 'Employee',
+          email: "e@e"
+        }))
+        const root = document.createElement("div")
+        root.setAttribute("id", "root")
+        document.body.appendChild(root)
+        router()
+      })
+
+      test("fetches bills from an API and fails with 404 message error", async () => {
+
+        window.onNavigate(ROUTES_PATH.NewBill)
+      
+        await waitFor(() => screen.getByText("Envoyer une note de frais"))
+
+        // Complete the form with valid data
+        screen.getByTestId("expense-type").value = "Restaurants et bars"
+        screen.getByTestId("expense-name").value = "Test expense name"
+        screen.getByTestId("datepicker").value = "2022-01-01"
+        screen.getByTestId("amount").value = "99"
+        screen.getByTestId("vat").value = "70"
+        screen.getByTestId("pct").value = "30"
+        screen.getByTestId("commentary").value = "Test integration POST"
+
+        // Upload a  file
+        const input = screen.getByTestId('file')
+        const fakeFile = new File(["(⌐□_□)"], 'test.png', { type: "image/png" });
+        await waitFor(() => {
+              userEvent.upload(input, fakeFile);
+        });
+
+        const spyStore = jest.spyOn(mockStore, "bills")
+        mockStore.bills.mockImplementationOnce(() => {
+          return {
+            update : (bill) =>  {
+              return Promise.reject(new Error("Erreur 404"))
+            }
+          }
+        })
+        jest.spyOn(console, 'error').mockImplementation(() => { });
+        console.error.mockClear();
+
+        // Submit the form
+        await waitFor(() => {
+              userEvent.click(screen.getByText('Envoyer'))
+        });
+
+
+        await new Promise(process.nextTick);
+        expect(console.error).toHaveBeenCalled();
+        expect(console.error.mock.calls[0][0].message).toContain('Erreur 404');
+        expect(screen.getByText("Mes notes de frais")).toBeTruthy();
+        expect(screen.getByText("Mes notes de frais")).toBeTruthy();
+      })
+
+      test("fetches bills from an API and fails with 500 message error", async () => {
+
+        window.onNavigate(ROUTES_PATH.NewBill)
+      
+        await waitFor(() => screen.getByText("Envoyer une note de frais"))
+
+        // Complete the form with valid data
+        screen.getByTestId("expense-type").value = "Restaurants et bars"
+        screen.getByTestId("expense-name").value = "Test expense name"
+        screen.getByTestId("datepicker").value = "2022-01-01"
+        screen.getByTestId("amount").value = "99"
+        screen.getByTestId("vat").value = "70"
+        screen.getByTestId("pct").value = "30"
+        screen.getByTestId("commentary").value = "Test integration POST"
+
+        // Upload a  file
+        const input = screen.getByTestId('file')
+        const fakeFile = new File(["(⌐□_□)"], 'test.png', { type: "image/png" });
+        await waitFor(() => {
+              userEvent.upload(input, fakeFile);
+        });
+
+        const spyStore = jest.spyOn(mockStore, "bills")
+        mockStore.bills.mockImplementationOnce(() => {
+          return {
+            update : (bill) =>  {
+              return Promise.reject(new Error("Erreur 500"))
+            }
+          }
+        })
+        jest.spyOn(console, 'error').mockImplementation(() => { });
+        console.error.mockClear();
+
+        // Submit the form
+        await waitFor(() => {
+              userEvent.click(screen.getByText('Envoyer'))
+        });
+
+
+        await new Promise(process.nextTick);
+        expect(console.error).toHaveBeenCalled();
+        expect(console.error.mock.calls[0][0].message).toContain('Erreur 500');
+        expect(screen.getByText("Mes notes de frais")).toBeTruthy();
+        expect(screen.getByText("Mes notes de frais")).toBeTruthy();
+      })
+
     })
   })
 })
