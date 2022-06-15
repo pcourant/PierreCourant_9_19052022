@@ -90,39 +90,216 @@ describe("Given I am connected as an employee", () => {
       })
     })
 
-    describe("When I attach a valid JPG image file to the form", () => {
-      test("Then new bill is created and stored", async () => {
+    describe("When I attach a valid image file to the form", () => {
+      describe("With extension .jpg", () => {
+        test("Then new bill is created and stored", async () => {
 
-        // Instanciation of NewBill
-        const newBill = new NewBill({ document, onNavigate: null, store: mockStore, localStorage: window.localStorage });
+          // Instanciation of NewBill
+          const newBill = new NewBill({ document, onNavigate: null, store: mockStore, localStorage: window.localStorage });
 
-        // HTML input element to attach file
-        const inputFiles = screen.getByTestId('file')
-        // Instanciation of test File
-        const testFile = new File(["(⌐□_□)"], 'test.jpg', { type: "image/jpg" });
+          // HTML input element to attach file
+          const inputFiles = screen.getByTestId('file')
+          // Instanciation of test File
+          const testFile = new File(["(⌐□_□)"], 'test.jpg', { type: "image/jpg" });
 
-        const handleChangeFile1 = jest.fn((e) => newBill.handleChangeFile(e))
-        inputFiles.addEventListener('change', handleChangeFile1)
+          const handleChangeFile1 = jest.fn((e) => newBill.handleChangeFile(e))
+          inputFiles.addEventListener('change', handleChangeFile1)
 
-        // Spy on the mocks : localStorage and store
-        const spyStorageGetItem = jest.spyOn(localStorageMock, "getItem")
-        const spyStore = jest.spyOn(mockStore, "bills")
+          // Spy on the mocks : localStorage and store
+          const spyStorageGetItem = jest.spyOn(localStorageMock, "getItem")
+          const spyStore = jest.spyOn(mockStore, "bills")
 
-        // Simulate the upload of the file
-        await waitFor(() => {
-              userEvent.upload(inputFiles, testFile);
-        });
-     
-        // Change file handler is called
-        expect(handleChangeFile1).toHaveBeenCalled();
-        
-        // New bill is created
-        expect(spyStorageGetItem).toHaveBeenCalledWith('user');
-        expect(spyStore).toHaveBeenCalled();
-        expect(newBill.fileName).toBe("test.jpg")
-        expect(newBill.billId).toBe("1234")
-        expect(newBill.fileUrl).toBe("https://localhost:3456/images/test.jpg")
-        expect(inputFiles.files[0]).toStrictEqual(testFile);
+          // Simulate the upload of the file
+          await waitFor(() => {
+            userEvent.upload(inputFiles, testFile);
+          });
+      
+          // Change file handler is called
+          expect(handleChangeFile1).toHaveBeenCalled();
+          
+          // New bill is created
+          expect(spyStorageGetItem).toHaveBeenCalledWith('user');
+          expect(spyStore).toHaveBeenCalled();
+          expect(newBill.fileName).toBe("test.jpg")
+          expect(newBill.billId).toBe("1234")
+          expect(newBill.fileUrl).toBe("https://localhost:3456/images/test.jpg")
+          expect(inputFiles.files[0]).toStrictEqual(testFile);
+        })
+      })
+      describe("With extension .JPG", () => {
+        test("Then new bill is created and stored", async () => {
+
+          // Instanciation of NewBill
+          const newBill = new NewBill({ document, onNavigate: null, store: mockStore, localStorage: window.localStorage });
+
+          // HTML input element to attach file
+          const inputFiles = screen.getByTestId('file')
+          // Instanciation of test File
+          const testFile = new File(["(⌐□_□)"], 'test.JPG', { type: "image/jpg" });
+
+          const handleChangeFile1 = jest.fn((e) => newBill.handleChangeFile(e))
+          inputFiles.addEventListener('change', handleChangeFile1)
+
+          // Spy on the mocks : localStorage and store
+          const spyStorageGetItem = jest.spyOn(localStorageMock, "getItem")
+          const spyStore = jest.spyOn(mockStore, "bills")
+
+          // Simulate the upload of the file
+          await waitFor(() => {
+            userEvent.upload(inputFiles, testFile);
+          });
+      
+          // Change file handler is called
+          expect(handleChangeFile1).toHaveBeenCalled();
+          
+          // New bill is created
+          expect(spyStorageGetItem).toHaveBeenCalledWith('user');
+          expect(spyStore).toHaveBeenCalled();
+          expect(newBill.fileName).toBe("test.JPG")
+          expect(newBill.billId).toBe("1234")
+          expect(newBill.fileUrl).toBe("https://localhost:3456/images/test.jpg")
+          expect(inputFiles.files[0]).toStrictEqual(testFile);
+        })
+      })
+      describe("With extension .jpeg", () => {
+        test("Then new bill is created and stored", async () => {
+
+          // Instanciation of NewBill
+          const newBill = new NewBill({ document, onNavigate: null, store: mockStore, localStorage: window.localStorage });
+
+          // HTML input element to attach file
+          const inputFiles = screen.getByTestId('file')
+          // Instanciation of test File
+          const testFile = new File(["(⌐□_□)"], 'test.jpeg', { type: "image/jpg" });
+
+          const handleChangeFile1 = jest.fn((e) => newBill.handleChangeFile(e))
+          inputFiles.addEventListener('change', handleChangeFile1)
+
+          // Spy on the mocks : localStorage and store
+          const spyStorageGetItem = jest.spyOn(localStorageMock, "getItem")
+          const spyStore = jest.spyOn(mockStore, "bills")
+
+          // Simulate the upload of the file
+          await waitFor(() => {
+            userEvent.upload(inputFiles, testFile);
+          });
+      
+          // Change file handler is called
+          expect(handleChangeFile1).toHaveBeenCalled();
+          
+          // New bill is created
+          expect(spyStorageGetItem).toHaveBeenCalledWith('user');
+          expect(spyStore).toHaveBeenCalled();
+          expect(newBill.fileName).toBe("test.jpeg")
+          expect(newBill.billId).toBe("1234")
+          expect(newBill.fileUrl).toBe("https://localhost:3456/images/test.jpg")
+          expect(inputFiles.files[0]).toStrictEqual(testFile);
+        })
+      })
+      describe("With extension .JPEG", () => {
+        test("Then new bill is created and stored", async () => {
+
+          // Instanciation of NewBill
+          const newBill = new NewBill({ document, onNavigate: null, store: mockStore, localStorage: window.localStorage });
+
+          // HTML input element to attach file
+          const inputFiles = screen.getByTestId('file')
+          // Instanciation of test File
+          const testFile = new File(["(⌐□_□)"], 'test.JPEG', { type: "image/jpg" });
+
+          const handleChangeFile1 = jest.fn((e) => newBill.handleChangeFile(e))
+          inputFiles.addEventListener('change', handleChangeFile1)
+
+          // Spy on the mocks : localStorage and store
+          const spyStorageGetItem = jest.spyOn(localStorageMock, "getItem")
+          const spyStore = jest.spyOn(mockStore, "bills")
+
+          // Simulate the upload of the file
+          await waitFor(() => {
+            userEvent.upload(inputFiles, testFile);
+          });
+      
+          // Change file handler is called
+          expect(handleChangeFile1).toHaveBeenCalled();
+          
+          // New bill is created
+          expect(spyStorageGetItem).toHaveBeenCalledWith('user');
+          expect(spyStore).toHaveBeenCalled();
+          expect(newBill.fileName).toBe("test.JPEG")
+          expect(newBill.billId).toBe("1234")
+          expect(newBill.fileUrl).toBe("https://localhost:3456/images/test.jpg")
+          expect(inputFiles.files[0]).toStrictEqual(testFile);
+        })
+      })
+      describe("With extension .png", () => {
+        test("Then new bill is created and stored", async () => {
+
+          // Instanciation of NewBill
+          const newBill = new NewBill({ document, onNavigate: null, store: mockStore, localStorage: window.localStorage });
+
+          // HTML input element to attach file
+          const inputFiles = screen.getByTestId('file')
+          // Instanciation of test File
+          const testFile = new File(["(⌐□_□)"], 'test.png', { type: "image/png" });
+
+          const handleChangeFile1 = jest.fn((e) => newBill.handleChangeFile(e))
+          inputFiles.addEventListener('change', handleChangeFile1)
+
+          // Spy on the mocks : localStorage and store
+          const spyStorageGetItem = jest.spyOn(localStorageMock, "getItem")
+          const spyStore = jest.spyOn(mockStore, "bills")
+
+          // Simulate the upload of the file
+          await waitFor(() => {
+            userEvent.upload(inputFiles, testFile);
+          });
+      
+          // Change file handler is called
+          expect(handleChangeFile1).toHaveBeenCalled();
+          
+          // New bill is created
+          expect(spyStorageGetItem).toHaveBeenCalledWith('user');
+          expect(spyStore).toHaveBeenCalled();
+          expect(newBill.fileName).toBe("test.png")
+          expect(newBill.billId).toBe("1234")
+          expect(newBill.fileUrl).toBe("https://localhost:3456/images/test.jpg")
+          expect(inputFiles.files[0]).toStrictEqual(testFile);
+        })
+      })
+      describe("With extension .PNG", () => {
+        test("Then new bill is created and stored", async () => {
+
+          // Instanciation of NewBill
+          const newBill = new NewBill({ document, onNavigate: null, store: mockStore, localStorage: window.localStorage });
+
+          // HTML input element to attach file
+          const inputFiles = screen.getByTestId('file')
+          // Instanciation of test File
+          const testFile = new File(["(⌐□_□)"], 'test.PNG', { type: "image/png" });
+
+          const handleChangeFile1 = jest.fn((e) => newBill.handleChangeFile(e))
+          inputFiles.addEventListener('change', handleChangeFile1)
+
+          // Spy on the mocks : localStorage and store
+          const spyStorageGetItem = jest.spyOn(localStorageMock, "getItem")
+          const spyStore = jest.spyOn(mockStore, "bills")
+
+          // Simulate the upload of the file
+          await waitFor(() => {
+            userEvent.upload(inputFiles, testFile);
+          });
+      
+          // Change file handler is called
+          expect(handleChangeFile1).toHaveBeenCalled();
+          
+          // New bill is created
+          expect(spyStorageGetItem).toHaveBeenCalledWith('user');
+          expect(spyStore).toHaveBeenCalled();
+          expect(newBill.fileName).toBe("test.PNG")
+          expect(newBill.billId).toBe("1234")
+          expect(newBill.fileUrl).toBe("https://localhost:3456/images/test.jpg")
+          expect(inputFiles.files[0]).toStrictEqual(testFile);
+        })
       })
     })
 
@@ -184,7 +361,6 @@ describe("Given I am connected as an employee", () => {
         expect(screen.getByText('Mes notes de frais')).toBeTruthy()
       })
     })
-
   })
 })
 
